@@ -1,34 +1,33 @@
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <title>Restaurant Bill</title>
+      <title>Рахунок закладу харчування</title>
   </head>
   <body>
   
 <form id="order-form">
-    <label for="menu">What did you order?</label>
+    <label for="menu">Що замовлено?</label>
 	<br>
     <select id="menu" name="menu" size="8" multiple>
-      <option value="Burger">Burger - $5.99</option>
-      <option value="Fries">Fries - $2.99</option>
-      <option value="Soda">Soda - $1.99</option>
-      <option value="Salad">Salad - $4.99</option>
-      <option value="Pizza">Pizza - $9.99</option>
-      <option value="Wings">Wings - $7.99</option>
+      <option value="Бургер">Бургер - 65.00 грн</option>
+      <option value="Морозиво">Морозиво - 29.50 грн</option>
+      <option value="Ситро">Ситро - 15.50 грн</option>
+      <option value="Салат">Салат - 44.00 грн</option>
+      <option value="Піцца">Піцца - 118.00 грн</option>
+      <option value="Смажена картопля">Смажена картопля - 37.00 грн</option>
     </select>
     <br />
     <br />
-    <label for="payment-method">Which payment method do you want to use?</label><br>
+    <label for="payment-method">Який метод оплати використано?</label><br>
 	<input type="radio" id="cash" name="payment-method" value="1" checked="checked">
-	<label for="cash">Cash</label><br>
+	<label for="cash">Готівка</label><br>
 	<input type="radio" id="credit-card" name="payment-method" value="2">
-	<label for="credit-card">Credit card</label><br>
+	<label for="credit-card">Visa/Mastercard</label><br>
 	<input type="radio" id="gift-card" name="payment-method" value="3">
-	<label for="gift-card">Gift card</label>
+	<label for="gift-card">Подарункова картка</label>
 	
     <br />
     <br />
-    <button type="submit">Generate Bill</button>
+    <button type="submit">Створити рахунок на оплату</button>
   </form>
 </body>	
     <script>
@@ -47,13 +46,13 @@
         generate(items, total) {
           // Generate the bill for cash payments
           let bill = "---------------------------\n";
-          bill += "Items:\n";
+          bill += "Замовлення:\n";
           for (let item of items) {
             bill += `- ${item.name} (${item.price})\n`;
           }
           bill += "---------------------------\n";
-          bill += `Total: ${total.toFixed(2)}\n`;
-		  bill += "Payment method: Cash\n";
+          bill += `Всього до оплати: ${total.toFixed(2)}\n`;
+		  bill += "Спосіб оплати: Готівка\n";
           return bill;
         }
       }
@@ -67,15 +66,15 @@
 
     // Generate the bill for credit card payments
     let bill = "---------------------------\n";
-    bill += "Items:\n";
+    bill += "Замовлення:\n";
     for (let item of items) {
       bill += `- ${item.name} (${item.price})\n`;
     }
     bill += "---------------------------\n";
-    bill += `Total: ${total.toFixed(2)}\n`;
-    bill += `Discount (5%): -${discount}\n`;
-    bill += `Final Total: ${finalTotal.toFixed(2)}\n`;
-    bill += "Payment method: Credit card\n";
+    bill += `Всього: ${total.toFixed(2)}\n`;
+    bill += `Знижка (5%): -${discount}\n`;
+    bill += `До оплати: ${finalTotal.toFixed(2)}\n`;
+    bill += "Спосіб оплати: Visa/Mastercard\n";
     return bill;
   }
 }
@@ -89,15 +88,15 @@
 
     // Generate the bill for gift card payments
     let bill = "---------------------------\n";
-    bill += "Items:\n";
+    bill += "Замовлення:\n";
     for (let item of items) {
       bill += `- ${item.name} (${item.price})\n`;
     }
     bill += "---------------------------\n";
-    bill += `Total: ${total.toFixed(2)}\n`;
-    bill += `Discount (10%): -${discount}\n`;
-    bill += `Final Total: ${finalTotal.toFixed(2)}\n`;
-    bill += "Payment method: Gift card\n";
+    bill += `Всього: ${total.toFixed(2)}\n`;
+    bill += `Знижка (10%): -${discount}\n`;
+    bill += `До оплати: ${finalTotal.toFixed(2)}\n`;
+    bill += "Спосіб оплати: Подарункова картка\n";
     return bill;
   }
 }
