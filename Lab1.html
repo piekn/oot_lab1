@@ -1,0 +1,154 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Restaurant Bill</title>
+  </head>
+  <body>
+  
+<form id="order-form">
+    <label for="menu">What did you order?</label>
+	<br>
+    <select id="menu" name="menu" size="8" multiple>
+      <option value="Burger">Burger - $5.99</option>
+      <option value="Fries">Fries - $2.99</option>
+      <option value="Soda">Soda - $1.99</option>
+      <option value="Salad">Salad - $4.99</option>
+      <option value="Pizza">Pizza - $9.99</option>
+      <option value="Wings">Wings - $7.99</option>
+    </select>
+    <br />
+    <br />
+    <label for="payment-method">Which payment method do you want to use?</label><br>
+	<input type="radio" id="cash" name="payment-method" value="1" checked="checked">
+	<label for="cash">Cash</label><br>
+	<input type="radio" id="credit-card" name="payment-method" value="2">
+	<label for="credit-card">Credit card</label><br>
+	<input type="radio" id="gift-card" name="payment-method" value="3">
+	<label for="gift-card">Gift card</label>
+	
+    <br />
+    <br />
+    <button type="submit">Generate Bill</button>
+  </form>
+</body>	
+    <script>
+	const menuSelect = document.getElementById("menu");
+    const menu = {};
+    for (let option of menuSelect.options) {
+      menu[option.value] = parseFloat(option.text.match(/\d+\.\d+/)[0]);
+    }
+      // Define the interface for the bill object
+      class Bill {
+        generate(items, total) {}
+      }
+
+      // Define the different types of bills
+      class CashBill extends Bill {
+        generate(items, total) {
+          // Generate the bill for cash payments
+          let bill = "---------------------------\n";
+          bill += "Items:\n";
+          for (let item of items) {
+            bill += `- ${item.name} (${item.price})\n`;
+          }
+          bill += "---------------------------\n";
+          bill += `Total: ${total.toFixed(2)}\n`;
+		  bill += "Payment method: Cash\n";
+          return bill;
+        }
+      }
+
+      class CreditCardBill extends Bill {
+  generate(items, total) {
+    // Calculate the discount
+    var discount = total * 0.05;
+	var discount= (Math.round(discount * 100)/100).toFixed(2);
+    const finalTotal = total - discount;
+
+    // Generate the bill for credit card payments
+    let bill = "---------------------------\n";
+    bill += "Items:\n";
+    for (let item of items) {
+      bill += `- ${item.name} (${item.price})\n`;
+    }
+    bill += "---------------------------\n";
+    bill += `Total: ${total.toFixed(2)}\n`;
+    bill += `Discount (5%): -${discount}\n`;
+    bill += `Final Total: ${finalTotal.toFixed(2)}\n`;
+    bill += "Payment method: Credit card\n";
+    return bill;
+  }
+}
+
+      class GiftCardBill extends Bill {
+  generate(items, total) {
+    // Calculate the discount
+    var discount = total * 0.1;
+	var discount= (Math.round(discount * 100)/100).toFixed(2);
+    const finalTotal = total - discount;
+
+    // Generate the bill for gift card payments
+    let bill = "---------------------------\n";
+    bill += "Items:\n";
+    for (let item of items) {
+      bill += `- ${item.name} (${item.price})\n`;
+    }
+    bill += "---------------------------\n";
+    bill += `Total: ${total.toFixed(2)}\n`;
+    bill += `Discount (10%): -${discount}\n`;
+    bill += `Final Total: ${finalTotal.toFixed(2)}\n`;
+    bill += "Payment method: Gift card\n";
+    return bill;
+  }
+}
+
+      // Define the bill factory
+      class BillFactory {
+        createBill() {
+		  const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+		  switch (paymentMethod) {
+			case "1":
+			  return new CashBill();
+			case "2":
+			  return new CreditCardBill();
+			case "3":
+			  return new GiftCardBill();
+			default:
+			  throw new Error("Invalid payment method.");
+		  }
+		}
+      }
+
+     const orderForm = document.getElementById("order-form");
+    orderForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const orderedItems = [];
+      for (let option of menuSelect.selectedOptions) {
+        orderedItems.push(option.value);
+      }
+
+      let total = 0;
+      const orderedItemsArray = [];
+
+      for (let item of orderedItems) {
+        if (menu[item]) {
+          total += menu[item];
+          orderedItemsArray.push({ name: item, price: menu[item] });
+        } else {
+          alert(`Invalid item: ${item}`);
+        }
+      }
+
+      const paymentMethod = parseInt(
+        orderForm.elements["payment-method"].value
+      );
+      const billFactory = new BillFactory();
+      const bill = billFactory.createBill(paymentMethod);
+      const generatedBill = bill.generate(orderedItemsArray, total);
+      alert(generatedBill);
+
+      orderForm.reset();
+    });
+</script>
+</html>
